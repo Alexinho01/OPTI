@@ -1,0 +1,90 @@
+/* Modelo de optimización para planificación de enfermería */
+/* Generado automáticamente desde archivos CSV */
+/* Restricción de cobertura: EXACTA (igualdad) */
+
+max: 2 x_1_1_Manana + 5 x_1_1_Noche + 1 x_1_2_Manana + 4 x_1_2_Noche + 9 x_1_3_Manana + 5 x_1_3_Noche + 6 x_1_5_Manana + 1 x_1_5_Noche + 9 x_1_6_Manana + 7 x_1_6_Noche + 6 x_2_1_Manana + 2 x_2_2_Manana + 9 x_2_2_Noche + 10 x_2_3_Manana + 1 x_2_3_Noche + 2 x_2_4_Manana + 6 x_2_4_Noche + 7 x_2_5_Noche + 8 x_2_6_Noche + 7 x_3_1_Manana + 1 x_3_1_Noche + 7 x_3_2_Manana + 4 x_3_2_Noche + 3 x_3_3_Noche + 5 x_3_4_Manana + 7 x_3_4_Noche + 3 x_3_5_Manana + 1 x_3_5_Noche + 5 x_3_6_Manana + 2 x_3_6_Noche + 5 x_4_1_Manana + 3 x_4_1_Noche + 8 x_4_2_Manana + 2 x_4_3_Manana + 5 x_4_3_Noche + 6 x_4_5_Manana + 8 x_4_5_Noche + 10 x_5_1_Manana + 6 x_5_1_Noche + 8 x_5_2_Manana + 9 x_5_2_Noche + 2 x_5_3_Noche + 2 x_5_4_Manana + 9 x_5_4_Noche + 10 x_5_5_Manana + 7 x_5_5_Noche + 5 x_5_6_Manana + 7 x_5_6_Noche + 1 x_6_1_Manana + 10 x_6_2_Manana + 9 x_6_2_Noche + 3 x_6_3_Noche + 3 x_6_4_Noche + 6 x_6_5_Noche + 2 x_6_6_Manana + 1 x_6_6_Noche + 5 x_7_1_Manana + 8 x_7_1_Noche + 6 x_7_2_Manana + 5 x_7_2_Noche + 1 x_7_3_Manana + 5 x_7_4_Manana + 8 x_7_4_Noche + 2 x_7_5_Manana + 9 x_7_5_Noche + 7 x_7_6_Noche + 5 x_8_1_Noche + 2 x_8_2_Manana + 4 x_8_2_Noche + 8 x_8_3_Manana + 2 x_8_3_Noche + 5 x_8_4_Manana + 6 x_8_4_Noche + 5 x_8_5_Manana + 9 x_8_5_Noche + 6 x_8_6_Manana + 1 x_8_6_Noche;
+
+/* Restricciones */
+x_1_1_Manana + x_2_1_Manana + x_3_1_Manana + x_4_1_Manana + x_5_1_Manana + x_6_1_Manana + x_7_1_Manana = 2;
+x_1_1_Noche + x_3_1_Noche + x_4_1_Noche + x_5_1_Noche + x_7_1_Noche + x_8_1_Noche = 2;
+x_1_2_Manana + x_2_2_Manana + x_3_2_Manana + x_4_2_Manana + x_5_2_Manana + x_6_2_Manana + x_7_2_Manana + x_8_2_Manana = 3;
+x_1_2_Noche + x_2_2_Noche + x_3_2_Noche + x_5_2_Noche + x_6_2_Noche + x_7_2_Noche + x_8_2_Noche = 3;
+x_1_3_Manana + x_2_3_Manana + x_4_3_Manana + x_7_3_Manana + x_8_3_Manana = 3;
+x_1_3_Noche + x_2_3_Noche + x_3_3_Noche + x_4_3_Noche + x_5_3_Noche + x_6_3_Noche + x_8_3_Noche = 2;
+x_2_4_Manana + x_3_4_Manana + x_5_4_Manana + x_7_4_Manana + x_8_4_Manana = 2;
+x_2_4_Noche + x_3_4_Noche + x_5_4_Noche + x_6_4_Noche + x_7_4_Noche + x_8_4_Noche = 2;
+x_1_5_Manana + x_3_5_Manana + x_4_5_Manana + x_5_5_Manana + x_7_5_Manana + x_8_5_Manana = 2;
+x_1_5_Noche + x_2_5_Noche + x_3_5_Noche + x_4_5_Noche + x_5_5_Noche + x_6_5_Noche + x_7_5_Noche + x_8_5_Noche = 3;
+x_1_6_Manana + x_3_6_Manana + x_5_6_Manana + x_6_6_Manana + x_8_6_Manana = 2;
+x_1_6_Noche + x_2_6_Noche + x_3_6_Noche + x_5_6_Noche + x_6_6_Noche + x_7_6_Noche + x_8_6_Noche = 2;
+x_1_1_Manana + x_1_1_Noche <= 2;
+x_1_2_Manana + x_1_2_Noche <= 2;
+x_1_3_Manana + x_1_3_Noche <= 2;
+x_1_5_Manana + x_1_5_Noche <= 2;
+x_1_6_Manana + x_1_6_Noche <= 2;
+x_2_1_Manana <= 2;
+x_2_2_Manana + x_2_2_Noche <= 2;
+x_2_3_Manana + x_2_3_Noche <= 2;
+x_2_4_Manana + x_2_4_Noche <= 2;
+x_2_5_Noche <= 2;
+x_2_6_Noche <= 2;
+x_3_1_Manana + x_3_1_Noche <= 2;
+x_3_2_Manana + x_3_2_Noche <= 2;
+x_3_3_Noche <= 2;
+x_3_4_Manana + x_3_4_Noche <= 2;
+x_3_5_Manana + x_3_5_Noche <= 2;
+x_3_6_Manana + x_3_6_Noche <= 2;
+x_4_1_Manana + x_4_1_Noche <= 2;
+x_4_2_Manana <= 2;
+x_4_3_Manana + x_4_3_Noche <= 2;
+x_4_5_Manana + x_4_5_Noche <= 2;
+x_5_1_Manana + x_5_1_Noche <= 2;
+x_5_2_Manana + x_5_2_Noche <= 2;
+x_5_3_Noche <= 2;
+x_5_4_Manana + x_5_4_Noche <= 2;
+x_5_5_Manana + x_5_5_Noche <= 2;
+x_5_6_Manana + x_5_6_Noche <= 2;
+x_6_1_Manana <= 2;
+x_6_2_Manana + x_6_2_Noche <= 2;
+x_6_3_Noche <= 2;
+x_6_4_Noche <= 2;
+x_6_5_Noche <= 2;
+x_6_6_Manana + x_6_6_Noche <= 2;
+x_7_1_Manana + x_7_1_Noche <= 2;
+x_7_2_Manana + x_7_2_Noche <= 2;
+x_7_3_Manana <= 2;
+x_7_4_Manana + x_7_4_Noche <= 2;
+x_7_5_Manana + x_7_5_Noche <= 2;
+x_7_6_Noche <= 2;
+x_8_1_Noche <= 2;
+x_8_2_Manana + x_8_2_Noche <= 2;
+x_8_3_Manana + x_8_3_Noche <= 2;
+x_8_4_Manana + x_8_4_Noche <= 2;
+x_8_5_Manana + x_8_5_Noche <= 2;
+x_8_6_Manana + x_8_6_Noche <= 2;
+x_1_1_Noche + x_1_2_Manana <= 1;
+x_1_2_Noche + x_1_3_Manana <= 1;
+x_1_5_Noche + x_1_6_Manana <= 1;
+x_2_2_Noche + x_2_3_Manana <= 1;
+x_2_3_Noche + x_2_4_Manana <= 1;
+x_3_1_Noche + x_3_2_Manana <= 1;
+x_3_3_Noche + x_3_4_Manana <= 1;
+x_3_4_Noche + x_3_5_Manana <= 1;
+x_3_5_Noche + x_3_6_Manana <= 1;
+x_4_1_Noche + x_4_2_Manana <= 1;
+x_5_1_Noche + x_5_2_Manana <= 1;
+x_5_3_Noche + x_5_4_Manana <= 1;
+x_5_4_Noche + x_5_5_Manana <= 1;
+x_5_5_Noche + x_5_6_Manana <= 1;
+x_6_5_Noche + x_6_6_Manana <= 1;
+x_7_1_Noche + x_7_2_Manana <= 1;
+x_7_2_Noche + x_7_3_Manana <= 1;
+x_7_4_Noche + x_7_5_Manana <= 1;
+x_8_1_Noche + x_8_2_Manana <= 1;
+x_8_2_Noche + x_8_3_Manana <= 1;
+x_8_3_Noche + x_8_4_Manana <= 1;
+x_8_4_Noche + x_8_5_Manana <= 1;
+x_8_5_Noche + x_8_6_Manana <= 1;
+
+/* Variables binarias */
+bin x_1_1_Manana, x_1_1_Noche, x_1_2_Manana, x_1_2_Noche, x_1_3_Manana, x_1_3_Noche, x_1_5_Manana, x_1_5_Noche, x_1_6_Manana, x_1_6_Noche, x_2_1_Manana, x_2_2_Manana, x_2_2_Noche, x_2_3_Manana, x_2_3_Noche, x_2_4_Manana, x_2_4_Noche, x_2_5_Noche, x_2_6_Noche, x_3_1_Manana, x_3_1_Noche, x_3_2_Manana, x_3_2_Noche, x_3_3_Noche, x_3_4_Manana, x_3_4_Noche, x_3_5_Manana, x_3_5_Noche, x_3_6_Manana, x_3_6_Noche, x_4_1_Manana, x_4_1_Noche, x_4_2_Manana, x_4_3_Manana, x_4_3_Noche, x_4_5_Manana, x_4_5_Noche, x_5_1_Manana, x_5_1_Noche, x_5_2_Manana, x_5_2_Noche, x_5_3_Noche, x_5_4_Manana, x_5_4_Noche, x_5_5_Manana, x_5_5_Noche, x_5_6_Manana, x_5_6_Noche, x_6_1_Manana, x_6_2_Manana, x_6_2_Noche, x_6_3_Noche, x_6_4_Noche, x_6_5_Noche, x_6_6_Manana, x_6_6_Noche, x_7_1_Manana, x_7_1_Noche, x_7_2_Manana, x_7_2_Noche, x_7_3_Manana, x_7_4_Manana, x_7_4_Noche, x_7_5_Manana, x_7_5_Noche, x_7_6_Noche, x_8_1_Noche, x_8_2_Manana, x_8_2_Noche, x_8_3_Manana, x_8_3_Noche, x_8_4_Manana, x_8_4_Noche, x_8_5_Manana, x_8_5_Noche, x_8_6_Manana, x_8_6_Noche;

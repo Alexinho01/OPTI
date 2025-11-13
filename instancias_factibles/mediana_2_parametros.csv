@@ -1,0 +1,13 @@
+parametro,valor
+num_trabajadores,39
+num_dias,9
+num_turnos,3
+num_fines_semana,1
+nivel_tension,moderada
+ratio_cobertura,2.455
+ratio_capacidad,2.721
+factible_basico,True
+turno_1,Mañana
+turno_2,Tarde
+turno_3,Noche
+fin_semana_1,"7,8"

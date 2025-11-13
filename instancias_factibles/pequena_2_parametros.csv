@@ -1,0 +1,11 @@
+parametro,valor
+num_trabajadores,13
+num_dias,6
+num_turnos,2
+num_fines_semana,0
+nivel_tension,alta_factibilidad
+ratio_cobertura,2.000
+ratio_capacidad,3.120
+factible_basico,True
+turno_1,Mañana
+turno_2,Noche

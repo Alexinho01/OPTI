@@ -1,0 +1,13 @@
+parametro,valor
+num_trabajadores,33
+num_dias,8
+num_turnos,3
+num_fines_semana,1
+nivel_tension,riesgo_infactibilidad
+ratio_cobertura,1.857
+ratio_capacidad,2.456
+factible_basico,True
+turno_1,Mañana
+turno_2,Tarde
+turno_3,Noche
+fin_semana_1,"7,8"
