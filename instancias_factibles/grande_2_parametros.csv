@@ -4,8 +4,8 @@ num_dias,19
 num_turnos,3
 num_fines_semana,2
 nivel_tension,riesgo_infactibilidad
-ratio_cobertura,1.591
-ratio_capacidad,2.283
+ratio_cobertura,1.550
+ratio_capacidad,2.233
 factible_basico,True
 turno_1,Mañana
 turno_2,Tarde

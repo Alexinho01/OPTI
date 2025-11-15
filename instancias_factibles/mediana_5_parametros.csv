@@ -4,9 +4,9 @@ num_dias,9
 num_turnos,3
 num_fines_semana,1
 nivel_tension,moderada
-ratio_cobertura,1.889
-ratio_capacidad,2.644
-factible_basico,True
+ratio_cobertura,0.750
+ratio_capacidad,1.991
+factible_basico,False
 turno_1,Mañana
 turno_2,Tarde
 turno_3,Noche

@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 
 class GeneradorInstanciasFactibles:
-    def __init__(self, semilla=42):
+    def __init__(self, semilla=52):
         """Inicializa el generador con una semilla para reproducibilidad"""
         random.seed(semilla)
         np.random.seed(semilla)
@@ -131,7 +131,59 @@ class GeneradorInstanciasFactibles:
             dem_array = np.floor(dem_array * factor_ajuste).astype(int)
         
         return dem_array.tolist()
-    
+    def forzar_infactibilidad(self, instancia):
+        """
+        Modifica la demanda de una instancia inicialmente factible
+        para volverla infactible respecto a la cobertura básica.
+        """
+        params = instancia["parametros"]
+        num_trabajadores = params["num_trabajadores"]
+        num_dias = params["num_dias"]
+        num_turnos = len(params["turnos"])
+        
+        disposicion = np.array(instancia["disposicion"])
+        demanda = np.array(instancia["demanda"])
+        
+        # Capacidad disponible por (día, turno)
+        capacidad_disponible = np.sum(disposicion > 0, axis=0)  # shape: (num_dias, num_turnos)
+        
+        # Elegir aleatoriamente un día y turno donde haya al menos 1 trabajador disponible
+        dias_validos, turnos_validos = np.where(capacidad_disponible > 0)
+        if len(dias_validos) == 0:
+            # En caso extremo de que no haya disponibilidad, simplemente aumentamos en (0,0)
+            d, t = 0, 0
+            capacidad_local = 0
+        else:
+            idx = np.random.randint(0, len(dias_validos))
+            d = int(dias_validos[idx])
+            t = int(turnos_validos[idx])
+            capacidad_local = capacidad_disponible[d, t]
+        
+        # Forzar infactibilidad de cobertura:
+        # Demanda mayor que la cantidad de trabajadores disponibles en ese día-turno
+        demanda[d, t] = capacidad_local + 1
+        
+        # Opcional: también podemos inflar un poco la demanda total para bajar ratio_capacidad
+        # (no es estrictamente necesario, pero refuerza la infactibilidad)
+        demanda_total = np.sum(demanda)
+        capacidad_maxima = 2 * num_trabajadores * num_dias
+        if demanda_total <= capacidad_maxima:
+            # Multiplicamos toda la matriz de demanda para superar la capacidad global
+            factor = 1.2
+            demanda = np.ceil(demanda * factor).astype(int)
+        
+        # Actualizar la instancia
+        instancia["demanda"] = demanda.tolist()
+        instancia["factibilidad"] = self.calcular_factibilidad(
+            instancia["disposicion"],
+            instancia["demanda"],
+            num_trabajadores,
+            num_dias,
+            num_turnos
+        )
+        
+        return instancia
+
     def determinar_fines_semana(self, num_dias):
         """
         Determina los conjuntos D_WE(w) para fines de semana
@@ -242,8 +294,10 @@ class GeneradorInstanciasFactibles:
             },
             "disposicion": disposicion,
             "demanda": demanda,
-            "factibilidad": factibilidad
+            "factibilidad": factibilidad,
+            "tipo": "factible"  # NUEVO
         }
+
         
         return instancia
     
@@ -277,8 +331,10 @@ class GeneradorInstanciasFactibles:
             },
             "disposicion": disposicion,
             "demanda": demanda,
-            "factibilidad": factibilidad
+            "factibilidad": factibilidad,
+            "tipo": "factible"  # NUEVO
         }
+
         
         return instancia
     
@@ -309,50 +365,89 @@ class GeneradorInstanciasFactibles:
             },
             "disposicion": disposicion,
             "demanda": demanda,
-            "factibilidad": factibilidad
+            "factibilidad": factibilidad,
+            "tipo": "factible"  # NUEVO
         }
+
         
         return instancia
     
-    def generar_conjunto_instancias(self, max_intentos=10):
-        """Genera 5 instancias de cada tamaño con control de factibilidad"""
+    def generar_conjunto_instancias(self, max_intentos=10, factibles_por_tamaño=3, infactibles_por_tamaño=2):
+        """
+        Genera, para cada tamaño (pequeña, mediana, grande),
+        factibles_por_tamaño instancias factibles y
+        infactibles_por_tamaño instancias infactibles.
+
+        Por defecto: 3 factibles y 2 infactibles (total 5 por tamaño).
+        """
         instancias = []
         
         print("Generando instancias pequeñas...")
-        for i in range(1, 6):
+        # --- FACTIBLES ---
+        for i in range(1, factibles_por_tamaño + 1):
             for intento in range(max_intentos):
                 instancia = self.generar_instancia_pequena(i)
                 if instancia['factibilidad']['factible_basico']:
                     instancias.append(instancia)
-                    print(f"  ✔ {instancia['id']}: Factible (RC: {instancia['factibilidad']['ratio_cobertura']:.2f})")
+                    print(f"  ✔ {instancia['id']} (factible): RC={instancia['factibilidad']['ratio_cobertura']:.2f}")
                     break
                 elif intento == max_intentos - 1:
-                    print(f"  ⚠ {instancia['id']}: Usando instancia marginalmente factible")
+                    print(f"  ⚠ {instancia['id']}: usando instancia aunque no cumpla todas las condiciones")
                     instancias.append(instancia)
         
+        # --- INFACTIBLES ---
+        for i in range(1, infactibles_por_tamaño + 1):
+            instancia = self.generar_instancia_pequena(i + factibles_por_tamaño)
+            instancia_infact = self.forzar_infactibilidad(instancia)
+            instancias.append(instancia_infact)
+            print(f"  ✖ {instancia_infact['id']} (infactible): "
+                  f"RC={instancia_infact['factibilidad']['ratio_cobertura']:.2f}, "
+                  f"FB={instancia_infact['factibilidad']['factible_basico']}")
+        
         print("Generando instancias medianas...")
-        for i in range(1, 6):
+        # --- FACTIBLES ---
+        for i in range(1, factibles_por_tamaño + 1):
             for intento in range(max_intentos):
                 instancia = self.generar_instancia_mediana(i)
                 if instancia['factibilidad']['factible_basico']:
                     instancias.append(instancia)
-                    print(f"  ✔ {instancia['id']}: Factible (RC: {instancia['factibilidad']['ratio_cobertura']:.2f})")
+                    print(f"  ✔ {instancia['id']} (factible): RC={instancia['factibilidad']['ratio_cobertura']:.2f}")
                     break
                 elif intento == max_intentos - 1:
-                    print(f"  ⚠ {instancia['id']}: Usando instancia marginalmente factible")
+                    print(f"  ⚠ {instancia['id']}: usando instancia aunque no cumpla todas las condiciones")
                     instancias.append(instancia)
         
+        # --- INFACTIBLES ---
+        for i in range(1, infactibles_por_tamaño + 1):
+            instancia = self.generar_instancia_mediana(i + factibles_por_tamaño)
+            instancia_infact = self.forzar_infactibilidad(instancia)
+            instancias.append(instancia_infact)
+            print(f"  ✖ {instancia_infact['id']} (infactible): "
+                  f"RC={instancia_infact['factibilidad']['ratio_cobertura']:.2f}, "
+                  f"FB={instancia_infact['factibilidad']['factible_basico']}")
+        
         print("Generando instancias grandes...")
-        for i in range(1, 6):
+        # --- FACTIBLES ---
+        for i in range(1, factibles_por_tamaño + 1):
             for intento in range(max_intentos):
                 instancia = self.generar_instancia_grande(i)
-                if instancia['factibilidad']['cobertura_suficiente']:  # Relajado para instancias grandes
+                # Para grandes usabas una condición un poco más relajada
+                if instancia['factibilidad']['cobertura_suficiente']:
                     instancias.append(instancia)
-                    print(f"  ✔ {instancia['id']}: Factible (RC: {instancia['factibilidad']['ratio_cobertura']:.2f})")
+                    print(f"  ✔ {instancia['id']} (factible seg. cobertura): RC={instancia['factibilidad']['ratio_cobertura']:.2f}")
                     break
                 elif intento == max_intentos - 1:
-                    print(f"  ⚠ {instancia['id']}: Usando instancia disponible")
+                    print(f"  ⚠ {instancia['id']}: usando instancia disponible")
                     instancias.append(instancia)
+        
+        # --- INFACTIBLES ---
+        for i in range(1, infactibles_por_tamaño + 1):
+            instancia = self.generar_instancia_grande(i + factibles_por_tamaño)
+            instancia_infact = self.forzar_infactibilidad(instancia)
+            instancias.append(instancia_infact)
+            print(f"  ✖ {instancia_infact['id']} (infactible): "
+                  f"RC={instancia_infact['factibilidad']['ratio_cobertura']:.2f}, "
+                  f"FB={instancia_infact['factibilidad']['factible_basico']}")
         
         return instancias
     
@@ -392,6 +487,7 @@ class GeneradorInstanciasFactibles:
         df_resumen.to_csv(archivo_resumen, index=False)
         
         return archivo_resumen
+    
 
 def main():
     """Función principal del generador"""
